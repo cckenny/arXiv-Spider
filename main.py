@@ -10,9 +10,9 @@ S_PATTERN_PDF = r'<span class="list-identifier">.*?\[<a href="/pdf/(.*?)" title=
 S_PATTERN_EMTRIES = r'\[ total of (.*?) entries:'
 BASE_URLs = (
     #  'https://arxiv.org',
-    'http://de.arxiv.org',
+    #'http://de.arxiv.org', can get real pdf on 20190409
     'http://cn.arxiv.org',
-    'http://lanl.arxiv.org',
+    #'http://lanl.arxiv.org', System Unavailable on 20190409
     'http://xxx.itp.ac.cn'
 )
 # the path to save the crawled files
@@ -24,7 +24,7 @@ spider = Spider(BASE_URLs[numpy.random.randint(0, len(BASE_URLs))], SAVE_DIR)
 WORKER_NUM = 10
 BEGIN_YEAR = 15
 BEGIN_MONTH = 1
-END_YEAR = 18
+END_YEAR = 19
 END_MONTH = 3
 
 
@@ -62,7 +62,7 @@ def download(_year, _month):
     page_url = '/list/cs/%02d%02d' % (_year, _month)
     page = spider.get_page(page_url)
     pattern_total = re.compile(S_PATTERN_EMTRIES, re.S)
-    total_obj = re.search(pattern_total, page)
+    total_obj = re.search(pattern_total, page.decode('utf-8'))
     if not total_obj:
         print('total match failed:[%s]' % S_PATTERN_EMTRIES)
         return False
@@ -76,7 +76,7 @@ def download(_year, _month):
         page = spider.get_page(page_url)
         pattern_pdf = re.compile(S_PATTERN_PDF, re.S)
         # get all the file id
-        task_list = re.findall(pattern_pdf, page)
+        task_list = re.findall(pattern_pdf, page.decode('utf-8'))
         task_list_size = len(task_list)
         workers = []
         if task_list:
