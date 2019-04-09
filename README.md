@@ -19,3 +19,8 @@ Tips: When you meet the 403 error or "Access Denied" error, don't worry. It mean
 Author: `Xingw Xiong`
 
 Date:   `2018-04-08`
+
+Date: 2019-04-09
+change urllib2 to urllib.request
+change 'a bytes-like object' variable page to string pattern by encode('utf-8')
+for running in python3
